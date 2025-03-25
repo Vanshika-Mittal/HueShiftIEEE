@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}Video - Hue Shift{% endblock %}
+{% block title %}Videos - Hue Shift{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-8 offset-md-2">
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="bi bi-film me-2"></i>Video Colorization</h4>
+                <h4 class="mb-0"><i class="bi bi-film me-2"></i>Add Color to Your Video</h4>
             </div>
             <div class="card-body">
-                <div class="text-center mb-4">
-                    <i class="bi bi-cloud-arrow-up display-1 text-primary"></i>
-                    <p class="lead mt-3">Upload your grayscale video to colorize</p>
-                </div>
-                
                 <form method="POST" enctype="multipart/form-data">
-                    <div class="mb-4">
-                        <input class="form-control form-control-lg" type="file" id="file" name="file" accept=".mp4,.avi,.mov,.wmv">
-                        <div class="form-text text-center">Supported: MP4, AVI, MOV, WMV (Max: 16MB)</div>
+                    <div class="text-center mb-4">
+                        <label for="file" class="form-label">
+                            <div class="upload-zone p-4 border rounded cursor-pointer">
+                                <i class="bi bi-cloud-arrow-up display-1 text-primary"></i>
+                                <p class="mt-3">Drop your video here or click to browse</p>
+                                <small class="text-muted">MP4, AVI, MOV, WMV up to 16MB</small>
+                            </div>
+                        </label>
+                        <input class="form-control d-none" type="file" id="file" name="file" accept=".mp4,.avi,.mov,.wmv">
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary btn-lg px-5">
-                            <i class="bi bi-magic me-2"></i>Colorize
+                            <i class="bi bi-magic me-2"></i>Colorize Video
                         </button>
                     </div>
                 </form>
-
-                <div class="alert alert-info mt-4">
-                    <i class="bi bi-info-circle me-2"></i>
-                    Video processing may take longer than images
+                
+                <div class="alert alert-info mt-4 text-center">
+                    <small><i class="bi bi-clock me-1"></i>Processing may take a few minutes</small>
                 </div>
             </div>
         </div>

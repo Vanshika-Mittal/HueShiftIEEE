@@ -1,169 +1,104 @@
 {% extends "base.html" %}
 
-{% block title %}Gallery - Hue Shift{% endblock %}
-
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h1 class="mb-4">Gallery</h1>
-        <p class="lead">Explore our colorization examples</p>
-        
-        <ul class="nav nav-tabs mb-4" id="galleryTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab">Images</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="videos-tab" data-bs-toggle="tab" data-bs-target="#videos" type="button" role="tab">Videos</button>
-            </li>
-        </ul>
-
-        <div class="tab-content" id="galleryContent">
-            <div class="tab-pane fade show active" id="images" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Historical Photo</h5>
-                                <div class="comparison-slider">
-                                    <img src="{{ url_for('static', filename='samples/sample1_bw.jpg') }}" alt="Black and White" class="img-fluid mb-2">
-                                    <div class="comparison-overlay">
-                                        <img src="{{ url_for('static', filename='samples/sample1_color.jpg') }}" alt="Colorized" class="img-fluid">
-                                    </div>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <small class="text-muted">Drag slider to compare</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Portrait</h5>
-                                <div class="comparison-slider">
-                                    <img src="{{ url_for('static', filename='samples/sample2_bw.jpg') }}" alt="Black and White" class="img-fluid mb-2">
-                                    <div class="comparison-overlay">
-                                        <img src="{{ url_for('static', filename='samples/sample2_color.jpg') }}" alt="Colorized" class="img-fluid">
-                                    </div>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <small class="text-muted">Drag slider to compare</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="videos" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                    <div class="col-md-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Historical Footage</h5>
-                                <div class="video-container">
-                                    <video controls class="img-fluid">
-                                        <source src="{{ url_for('static', filename='samples/sample_video.mp4') }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <button class="btn btn-sm btn-outline-primary toggle-video">Show Original</button>
-                                    <small class="text-muted">Click to switch between original and colorized</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-5">
-            <h3>Recently Processed</h3>
-            <p class="text-muted">Your recently colorized media will appear here</p>
-            <div class="row" id="recentlyProcessed">
-                <div class="col-12">
-                    <div class="alert alert-info">
-                        <p class="mb-0">Upload and process your first image or video to see it here!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="container mt-4">
+    <h2 class="mb-4">Gallery</h2>
+    
+    <div class="row" id="gallery-container">
+        <!-- Gallery items will be loaded here -->
     </div>
+
+    <nav aria-label="Gallery navigation" class="mt-4">
+        <ul class="pagination justify-content-center" id="pagination">
+            <!-- Pagination will be added here -->
+        </ul>
+    </nav>
 </div>
 
-<style>
-.comparison-slider {
-    position: relative;
-    overflow: hidden;
-    cursor: ew-resize;
-}
-
-.comparison-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    border-right: 2px solid white;
-}
-
-.video-container {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%;
-}
-
-.video-container video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-</style>
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const sliders = document.querySelectorAll('.comparison-slider');
-    
-    sliders.forEach(slider => {
-        let isDown = false;
-        
-        slider.addEventListener('mousedown', () => isDown = true);
-        window.addEventListener('mouseup', () => isDown = false);
-        window.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            
-            const overlay = slider.querySelector('.comparison-overlay');
-            const rect = slider.getBoundingClientRect();
-            const x = e.pageX - rect.left;
-            const width = slider.offsetWidth;
-            
-            overlay.style.width = `${(x / width) * 100}%`;
-        });
-    });
+let currentPage = 1;
+const perPage = 12;
 
-    const toggleBtns = document.querySelectorAll('.toggle-video');
-    toggleBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const video = this.closest('.card-body').querySelector('video');
-            const isOriginal = this.textContent === 'Show Original';
+async function loadGallery(page = 1) {
+    try {
+        const response = await fetch(`/gallery?page=${page}&per_page=${perPage}`);
+        const data = await response.json();
+        
+        const container = document.getElementById('gallery-container');
+        container.innerHTML = '';
+        
+        Object.entries(data.items).forEach(([id, item]) => {
+            const col = document.createElement('div');
+            col.className = 'col-md-4 col-lg-3 mb-4';
             
-            if (isOriginal) {
-                video.src = video.src.replace('_color', '_bw');
-                this.textContent = 'Show Colorized';
-            } else {
-                video.src = video.src.replace('_bw', '_color');
-                this.textContent = 'Show Original';
-            }
+            col.innerHTML = `
+                <div class="card h-100">
+                    <img src="${item.thumbnail_url}" class="card-img-top" alt="Colorized image">
+                    <div class="card-body">
+                        <p class="card-text text-muted">${new Date(item.created_at).toLocaleDateString()}</p>
+                        <a href="${item.result_url}" class="btn btn-primary btn-sm" target="_blank">View Full Size</a>
+                    </div>
+                </div>
+            `;
             
-            video.load();
-            video.play();
+            container.appendChild(col);
         });
+        
+        // Update pagination
+        const totalPages = Math.ceil(data.total / perPage);
+        updatePagination(page, totalPages);
+        
+        // Highlight recently processed image if any
+        const lastProcessed = sessionStorage.getItem('lastProcessedImage');
+        if (lastProcessed) {
+            const processedData = JSON.parse(lastProcessed);
+            highlightProcessedImage(processedData.imageId);
+            sessionStorage.removeItem('lastProcessedImage');
+        }
+    } catch (error) {
+        console.error('Error loading gallery:', error);
+    }
+}
+
+function updatePagination(currentPage, totalPages) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+    
+    // Previous button
+    pagination.innerHTML += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="loadGallery(${currentPage - 1})" ${currentPage === 1 ? 'tabindex="-1" aria-disabled="true"' : ''}>Previous</a>
+        </li>
+    `;
+    
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="loadGallery(${i})">${i}</a>
+            </li>
+        `;
+    }
+    
+    // Next button
+    pagination.innerHTML += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="loadGallery(${currentPage + 1})" ${currentPage === totalPages ? 'tabindex="-1" aria-disabled="true"' : ''}>Next</a>
+        </li>
+    `;
+}
+
+function highlightProcessedImage(imageId) {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        if (card.querySelector(`[data-image-id="${imageId}"]`)) {
+            card.classList.add('border-primary');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     });
-});
+}
+
+// Load gallery when page loads
+document.addEventListener('DOMContentLoaded', () => loadGallery(1));
 </script>
-{% endblock %} 
+{% endblock %}

@@ -4,17 +4,15 @@
 
 {% block content %}
 <div class="jumbotron p-5 bg-light rounded">
-    <h1 class="display-4">Welcome to Hue Shift</h1>
-    <p class="lead">Transform your black and white media into vibrant, colorful masterpieces</p>
-    <hr class="my-4">
+    <h1 class="display-4">Bring Your Photos to Life</h1>
+    <p class="lead">Turn black & white into color - Simple, Fast, Free</p>
     <div class="row mt-4">
         <div class="col-md-6 mb-3">
             <div class="card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-image display-4 mb-3 text-primary"></i>
-                    <h5 class="card-title">Image Colorization</h5>
-                    <p class="card-text">Bring your old photos to life with realistic colors.</p>
-                    <a href="{{ url_for('upload_image') }}" class="btn btn-primary">Start Now</a>
+                    <h5 class="card-title">Photos</h5>
+                    <a href="{{ url_for('upload_image') }}" class="btn btn-primary">Try Now</a>
                 </div>
             </div>
         </div>
@@ -22,9 +20,8 @@
             <div class="card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-film display-4 mb-3 text-primary"></i>
-                    <h5 class="card-title">Video Colorization</h5>
-                    <p class="card-text">Add color to your vintage videos and film footage.</p>
-                    <a href="{{ url_for('upload_video') }}" class="btn btn-primary">Start Now</a>
+                    <h5 class="card-title">Videos</h5>
+                    <a href="{{ url_for('upload_video') }}" class="btn btn-primary">Try Now</a>
                 </div>
             </div>
         </div>
@@ -32,7 +29,8 @@
 </div>
 
 <div class="mt-5 text-center">
-    <h3>See It In Action</h3>
-    <p class="lead mb-4">Check out our <a href="{{ url_for('gallery') }}">gallery</a> to see examples of colorized images and videos.</p>
+    <a href="{{ url_for('gallery') }}" class="btn btn-lg btn-outline-primary">
+        <i class="bi bi-images me-2"></i>View Gallery
+    </a>
 </div>
 {% endblock %} 
