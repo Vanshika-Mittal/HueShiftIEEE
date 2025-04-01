@@ -1,0 +1,27 @@
+dataset_config:
+  ROOT: 'data'
+  BATCH_SIZE: 2
+  IMG_SIZE: 16
+
+training_config:
+  NUM_EPOCHS: 50
+  NUM_TIMESTEPS: 1000
+
+model_config:
+  DOWN_CHANNELS: [256, 384, 512, 768]
+  MID_CHANNELS: [768, 512]
+  TIME_EMB_DIM: 512
+  DOWN_SAMPLE: [True, True, True]
+  NUM_DOWN_LAYERS: 2
+  NUM_MID_LAYERS: 2
+  NUM_UP_LAYERS: 2
+  ATTN: [True, True, True]
+  NORM_CHANNELS: 32
+  NUM_HEADS: 16
+  CONV_OUT_CHANNELS: 128
+  Z_CHANNELS: 3
+  CONDITION:
+    COND_CHANNELS: 2
+inference_config:
+  NROWS: 1
+  NUM_SAMPLES: 4
