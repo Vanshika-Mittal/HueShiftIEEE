@@ -29,35 +29,35 @@
                                     {% if sample.ground_truth %}
                                     <div class="video-item">
                                         <h5>Ground Truth</h5>
-                                        <video class="sync-video" src="{{ sample.ground_truth }}" autoplay loop muted playsinline></video>
+                                        <video class="sync-video" src="{{ sample.ground_truth }}" loop muted playsinline></video>
                                     </div>
                                     {% endif %}
                                     
                                     {% if sample.grayscale %}
                                     <div class="video-item">
                                         <h5>Black & White Input</h5>
-                                        <video class="sync-video" src="{{ sample.grayscale }}" autoplay loop muted playsinline></video>
+                                        <video class="sync-video" src="{{ sample.grayscale }}" loop muted playsinline></video>
                                     </div>
                                     {% endif %}
                                     
                                     {% if sample.low_res_output %}
                                     <div class="video-item">
                                         <h5>Low Resolution Output</h5>
-                                        <video class="sync-video" src="{{ sample.low_res_output }}" autoplay loop muted playsinline></video>
+                                        <video class="sync-video" src="{{ sample.low_res_output }}" loop muted playsinline></video>
                                     </div>
                                     {% endif %}
                                     
                                     {% if sample.high_res_output %}
                                     <div class="video-item">
                                         <h5>High Resolution Output</h5>
-                                        <video class="sync-video" src="{{ sample.high_res_output }}" autoplay loop muted playsinline></video>
+                                        <video class="sync-video" src="{{ sample.high_res_output }}" loop muted playsinline></video>
                                     </div>
                                     {% endif %}
                                     
                                     {% if sample.final_output %}
                                     <div class="video-item">
                                         <h5>Final Output</h5>
-                                        <video class="sync-video" src="{{ sample.final_output }}" autoplay loop muted playsinline></video>
+                                        <video class="sync-video" src="{{ sample.final_output }}" loop muted playsinline></video>
                                     </div>
                                     {% endif %}
                                 </div>
@@ -77,28 +77,28 @@
                                                 {% if sample.stage_1 %}
                                                 <div class="col-md-6 mb-3">
                                                     <h5>Stage 1 Reconstruction</h5>
-                                                    <video class="additional-video" src="{{ sample.stage_1 }}" autoplay loop muted></video>
+                                                    <video class="additional-video" src="{{ sample.stage_1 }}" loop muted playsinline></video>
                                                 </div>
                                                 {% endif %}
                                                 
                                                 {% if sample.neural_filter %}
                                                 <div class="col-md-6 mb-3">
                                                     <h5>Neural Filter Output</h5>
-                                                    <video class="additional-video" src="{{ sample.neural_filter }}" autoplay loop muted></video>
+                                                    <video class="additional-video" src="{{ sample.neural_filter }}" loop muted playsinline></video>
                                                 </div>
                                                 {% endif %}
                                                 
                                                 {% if sample.global_info %}
                                                 <div class="col-md-6 mb-3">
                                                     <h5>Global Info (Comparison Loss)</h5>
-                                                    <video class="additional-video" src="{{ sample.global_info }}" autoplay loop muted></video>
+                                                    <video class="additional-video" src="{{ sample.global_info }}" loop muted playsinline></video>
                                                 </div>
                                                 {% endif %}
                                                 
                                                 {% if sample.concatenated %}
                                                 <div class="col-md-6 mb-3">
                                                     <h5>Combined Process Visualization</h5>
-                                                    <video class="additional-video" src="{{ sample.concatenated }}" autoplay loop muted></video>
+                                                    <video class="additional-video" src="{{ sample.concatenated }}" loop muted playsinline></video>
                                                 </div>
                                                 {% endif %}
                                             </div>
@@ -136,7 +136,7 @@
                                     <span class="badge bg-primary">{{ sample.complexity }}</span>
                                 </div>
                                 <div class="card-body">
-                                    <video class="w-100" src="{{ sample.output }}" autoplay loop muted></video>
+                                    <video class="w-100" src="{{ sample.output }}" loop muted playsinline></video>
                                 </div>
                             </div>
                         </div>
@@ -153,14 +153,14 @@
     .video-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 10px;
         justify-content: center;
     }
     
     .video-item {
         flex: 1;
-        min-width: 200px;
-        max-width: 320px;
+        min-width: 160px;
+        max-width: 240px;
         text-align: center;
     }
     
@@ -181,43 +181,96 @@
         height: auto;
         border: 1px solid #ddd;
         border-radius: 4px;
+        max-width: 320px;
+        display: block;
+        margin: 0 auto;
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Sync videos within each sample group
-        const videoGroups = document.querySelectorAll('.video-container');
-        
-        videoGroups.forEach(group => {
-            const videos = group.querySelectorAll('.sync-video');
-            
-            // Ensure all videos play on page load
-            videos.forEach(video => {
-                video.play().catch(e => {
+        // Function to play all videos in a group
+        function playAllVideos(videoElements) {
+            // Play all videos
+            const playPromises = Array.from(videoElements).map(video => {
+                // Reset any playback rate adjustments
+                video.playbackRate = 1.0;
+                
+                // Set attributes for proper looping
+                video.loop = true;
+                video.muted = true;
+                
+                // Play the video
+                return video.play().catch(e => {
                     console.log('Auto-play was prevented:', e);
-                    // We'll handle synchronization when user interacts with videos
                 });
             });
             
+            // After all videos have started playing, ensure they're at the same time
+            Promise.all(playPromises).then(() => {
+                syncVideoTimes(videoElements);
+            });
+        }
+        
+        // Function to synchronize video times
+        function syncVideoTimes(videoElements) {
+            if (videoElements.length < 2) return;
+            
+            // Use the first video as reference
+            const refTime = videoElements[0].currentTime;
+            
+            // Sync all other videos to match
+            videoElements.forEach((video, index) => {
+                if (index > 0 && Math.abs(video.currentTime - refTime) > 0.1) {
+                    video.currentTime = refTime;
+                }
+            });
+        }
+        
+        // Get all video containers
+        const videoGroups = document.querySelectorAll('.video-container');
+        
+        // Process each video group
+        videoGroups.forEach(group => {
+            const videos = Array.from(group.querySelectorAll('.sync-video'));
+            
+            // Play all videos on page load
+            playAllVideos(videos);
+            
+            // Set up periodic sync to keep videos aligned
+            setInterval(() => {
+                syncVideoTimes(videos);
+                
+                // Check for paused videos and restart them
+                videos.forEach(video => {
+                    if (video.paused && !document.hidden) {
+                        video.play().catch(e => console.log('Auto-play was prevented:', e));
+                    }
+                });
+            }, 1000);
+            
+            // Set up event listeners for keeping videos in sync
             videos.forEach(video => {
+                // When one video plays, play all videos
                 video.addEventListener('play', () => {
                     videos.forEach(v => {
-                        if (v !== video) {
-                            v.currentTime = video.currentTime;
-                            v.play().catch(e => console.log('Could not play synchronized video:', e));
+                        if (v !== video && v.paused) {
+                            v.play().catch(e => console.log('Could not sync play:', e));
                         }
+                        v.currentTime = video.currentTime;
                     });
                 });
                 
+                // When one video pauses, pause all videos
                 video.addEventListener('pause', () => {
                     videos.forEach(v => {
-                        if (v !== video) {
+                        if (v !== video && !v.paused) {
                             v.pause();
                         }
                     });
                 });
                 
+                // When one video seeks, seek all videos
                 video.addEventListener('seeked', () => {
                     videos.forEach(v => {
                         if (v !== video) {
@@ -225,10 +278,19 @@
                         }
                     });
                 });
+                
+                // Add click handling for play/pause
+                video.addEventListener('click', () => {
+                    if (video.paused) {
+                        videos.forEach(v => v.play().catch(e => console.log('Could not play on click:', e)));
+                    } else {
+                        videos.forEach(v => v.pause());
+                    }
+                });
             });
         });
         
-        // Handle accordion open/close to play/pause additional videos
+        // Handle accordion videos (additional videos)
         const accordionButtons = document.querySelectorAll('.accordion-button');
         accordionButtons.forEach(button => {
             button.addEventListener('click', function() {
@@ -236,17 +298,52 @@
                 const collapseId = this.getAttribute('data-bs-target').substring(1);
                 const collapse = document.getElementById(collapseId);
                 
-                // Wait for the collapse animation to complete
                 setTimeout(() => {
-                    const additionalVideos = collapse.querySelectorAll('.additional-video');
+                    const additionalVideos = Array.from(collapse.querySelectorAll('.additional-video'));
+                    
                     additionalVideos.forEach(video => {
-                        if (isExpanded) {
-                            video.pause();
-                        } else {
-                            video.play().catch(e => console.log('Could not auto-play additional video:', e));
-                        }
+                        video.loop = true;
+                        video.muted = true;
                     });
-                }, 350); // Approximate time for the Bootstrap collapse animation
+                    
+                    if (!isExpanded) {
+                        // Play all additional videos when accordion opens
+                        playAllVideos(additionalVideos);
+                    }
+                    
+                    // Add click handling for additional videos
+                    additionalVideos.forEach(video => {
+                        video.onclick = function() {
+                            if (this.paused) {
+                                additionalVideos.forEach(v => v.play().catch(e => {}));
+                            } else {
+                                additionalVideos.forEach(v => v.pause());
+                            }
+                        };
+                    });
+                    
+                    // Set up periodic sync for additional videos
+                    setInterval(() => {
+                        syncVideoTimes(additionalVideos);
+                    }, 1000);
+                }, 350);
+            });
+        });
+        
+        // Handle GAN videos
+        const ganVideos = document.querySelectorAll('.gan-sample video');
+        ganVideos.forEach(video => {
+            video.loop = true;
+            video.muted = true;
+            video.play().catch(e => console.log('GAN video autoplay prevented:', e));
+            
+            // Add click to play/pause
+            video.addEventListener('click', function() {
+                if (this.paused) {
+                    this.play().catch(e => {});
+                } else {
+                    this.pause();
+                }
             });
         });
         

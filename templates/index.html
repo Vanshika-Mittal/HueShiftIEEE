@@ -3,77 +3,294 @@
 {% block title %}Home - Hue Shift{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
 <div class="jumbotron p-5 bg-light rounded">
-    <h1 class="display-4">Bring Your Photos to Life</h1>
-    <p class="lead">Turn black & white into color - Simple, Fast, Free</p>
-    <div class="row mt-4">
-        <div class="col-md-6 mb-3">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-image display-4 mb-3 text-primary"></i>
-                    <h5 class="card-title">Photos</h5>
-                    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" class="upload-form">
-                        <input type="file" name="image" accept="image/*" class="form-control mb-2" required>
-                        <button type="submit" class="btn btn-primary">Upload & Process</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-film display-4 mb-3 text-primary"></i>
-                    <h5 class="card-title">Videos</h5>
-                    <a href="{{ url_for('upload_video') }}" class="btn btn-primary">Try Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="mt-5 text-center">
-    <a href="{{ url_for('gallery') }}" class="btn btn-lg btn-outline-primary">
-        <i class="bi bi-images me-2"></i>View Gallery
-    </a>
-</div>
-
-<div id="result-container" class="mt-4" style="display: none;">
     <div class="row">
-        <div class="col-md-6">
-            <h4>Original</h4>
-            <img id="original-image" class="img-fluid" alt="Original image">
+        <div class="col-md-7">
+            <h1 class="display-4">HueShift: Breathing Life into Every Frame</h1>
+            <p class="lead">Transforming grayscale videos into vibrant color with advanced AI</p>
+            <div class="mt-4">
+                <a href="{{ url_for('upload') }}" class="btn btn-primary btn-lg">Try It Now</a>
+                <a href="{{ url_for('gallery') }}" class="btn btn-outline-primary btn-lg ms-2">View Gallery</a>
+            </div>
         </div>
-        <div class="col-md-6">
-            <h4>Colorized</h4>
-            <img id="result-image" class="img-fluid" alt="Colorized image">
+        <div class="col-md-5">
+            <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="HueShift Demo" class="img-fluid rounded shadow">
         </div>
     </div>
 </div>
 
-<script>
-document.querySelector('.upload-form').onsubmit = async function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    
-    try {
-        const response = await fetch("{{ url_for('upload_file') }}", {
-            method: 'POST',
-            body: formData
-        });
+<!-- Project Overview Section -->
+<section class="my-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Project Overview</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <p class="lead text-center">
+                    HueShift is an advanced video colorization project that transforms grayscale videos into vibrant color
+                    using two different deep learning approaches: Diffusion Models and Generative Adversarial Networks (GANs).
+                    Our goal was to develop and compare these two methods, with a special focus on ensuring temporal consistency
+                    and realistic coloration.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Video Colorization Section -->
+<section class="my-5 bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Why Video Colorization?</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <p>Colorization enhances visual quality and usability of grayscale media, opening new possibilities for:</p>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card mb-3 h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-film text-primary me-2"></i>Historical Film Restoration</h5>
+                                <p class="card-text">Revive historical footage with realistic color, making history more engaging.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3 h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-palette text-primary me-2"></i>Artistic Enhancement</h5>
+                                <p class="card-text">Transform creative works, giving new life to old artistic visuals.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3 h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-camera-reels text-primary me-2"></i>Media Production</h5>
+                                <p class="card-text">Streamline post-production workflows with automated colorization.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3 h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-book text-primary me-2"></i>Educational Content</h5>
+                                <p class="card-text">Enhance learning materials with vibrant color, improving engagement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Dual Approach Section -->
+<section class="my-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Dual Approach</h2>
         
-        const result = await response.json();
+        <!-- Diffusion Model -->
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6">
+                <h3>1. Diffusion-Based Approach</h3>
+                <p>Diffusion models are a class of generative models that work by iteratively adding and then removing noise. Our implementation:</p>
+                <ul>
+                    <li><strong>Operates in LAB Color Space</strong> - Separating luminance (grayscale) from color information</li>
+                    <li><strong>Uses U-Net Architecture</strong> - With encoder, bottleneck, decoder, and skip connections</li>
+                    <li><strong>Ensures Temporal Consistency</strong> - Through neural deflickering with an atlas-based approach</li>
+                </ul>
+                <a href="{{ url_for('gallery') }}?tab=diffusion" class="btn btn-outline-primary mt-3">See Diffusion Results</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="{{ url_for('static', filename='images/diffusion_process.jpg') }}" alt="Diffusion Model Process" class="img-fluid rounded shadow">
+            </div>
+        </div>
         
-        if (result.success) {
-            document.getElementById('result-container').style.display = 'block';
-            document.getElementById('original-image').src = result.original_path;
-            document.getElementById('result-image').src = result.result_path;
-        } else {
-            alert(result.error || 'Processing failed');
-        }
-    } catch (err) {
-        alert('Error: ' + err.message);
-    }
-};
-</script>
+        <!-- GAN Model -->
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <h3>2. GAN-Based Approach</h3>
+                <p>Our GAN implementation uses a saliency map-guided approach for more focused colorization of important regions:</p>
+                <ul>
+                    <li><strong>Saliency-Guided Generator</strong> - Focuses on important areas of the image</li>
+                    <li><strong>Dual Discriminator Setup</strong> - One for color realism, one for attention to salient areas</li>
+                    <li><strong>Combined Loss Functions</strong> - Balancing adversarial, L1, and saliency losses</li>
+                </ul>
+                <a href="{{ url_for('gallery') }}?tab=gan" class="btn btn-outline-primary mt-3">See GAN Results</a>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <img src="{{ url_for('static', filename='images/gan_process.jpg') }}" alt="GAN Model Process" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Results Comparison -->
+<section class="my-5 bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Results Comparison</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-primary">
+                            <tr>
+                                <th scope="col">Aspect</th>
+                                <th scope="col">Diffusion Model</th>
+                                <th scope="col">GAN Model</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Color Quality</th>
+                                <td>More natural color distribution</td>
+                                <td>Vibrant but can sometimes be less accurate</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Scene Handling</th>
+                                <td>Better at complex scenes</td>
+                                <td>Excels at simple scenes</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Inference Time</th>
+                                <td>Slower due to iterative denoising</td>
+                                <td>Faster single-pass inference</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Training Efficiency</th>
+                                <td>More compute-intensive</td>
+                                <td>More efficient training</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('gallery') }}" class="btn btn-primary">Explore Full Gallery</a>
+        </div>
+    </div>
+</section>
+
+<!-- Sample Results -->
+<section class="my-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Sample Results</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Diffusion Model</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <video class="w-100" autoplay loop muted>
+                            <source src="{{ url_for('static', filename='gallery/diffusion/v_ApplyLipstick_g05_c04/concatenated/output.mp4') }}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-footer">
+                        <p class="mb-0">Sample 1 - Apply Lipstick (Combined View)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">GAN Model</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <video class="w-100" autoplay loop muted>
+                            <source src="{{ url_for('static', filename='gallery/gan/simple/v_HorseRiding_g03_c04.mp4') }}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-footer">
+                        <p class="mb-0">Horse Riding (Simple Scene)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="my-5 bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Team</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Mentors</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Aditya Ubaradka</li>
+                        <li class="list-group-item">Aishini Bhattacharjee</li>
+                        <li class="list-group-item">Hemang Jamadagni</li>
+                        <li class="list-group-item">Sree Dakshinya</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Mentees</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Akhil Sakhtieswaran</li>
+                        <li class="list-group-item">Swaraj Singh</li>
+                        <li class="list-group-item">Vanshika Mittal</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- References Section -->
+<section class="my-5">
+    <div class="container">
+        <h2 class="text-center mb-4">References & Resources</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="list-group">
+                    <a href="https://arxiv.org/abs/2006.11239" target="_blank" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Denoising Diffusion Probabilistic Models</h5>
+                        </div>
+                        <p class="mb-1">The foundation for our diffusion-based approach</p>
+                    </a>
+                    <a href="https://arxiv.org/abs/2303.08120" target="_blank" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Blind Video Deflickering by Neural Filtering with a Flawed Atlas</h5>
+                        </div>
+                        <p class="mb-1">Used for ensuring temporal consistency in our diffusion approach</p>
+                    </a>
+                    <a href="https://arxiv.org/abs/2011.05108" target="_blank" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">SCGAN: Saliency Map-guided Colorization with Generative Adversarial Network</h5>
+                        </div>
+                        <p class="mb-1">The basis for our GAN-based approach</p>
+                    </a>
+                </div>
+                <div class="mt-4 text-center">
+                    <a href="https://github.com/Kazedaa/Hueshift-Video-Coloring" target="_blank" class="btn btn-outline-primary me-2">
+                        <i class="bi bi-github me-1"></i>Diffusion Approach
+                    </a>
+                    <a href="https://github.com/SreeDakshinya/HueShift-Video-Coloring/tree/main" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-github me-1"></i>GAN Approach
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call-to-Action -->
+<section class="my-5 text-center">
+    <div class="container">
+        <div class="p-5 bg-primary text-white rounded">
+            <h2>Ready to try HueShift?</h2>
+            <p class="lead">Transform your grayscale images and videos into vibrant color</p>
+            <a href="{{ url_for('upload') }}" class="btn btn-light btn-lg mt-3">Get Started Now</a>
+        </div>
+    </div>
+</section>
 {% endblock %} 
