@@ -30,7 +30,7 @@
                     HueShift is an advanced video colorization project that transforms grayscale videos into vibrant color
                     using two different deep learning approaches: Diffusion Models and Generative Adversarial Networks (GANs).
                     Our goal was to develop and compare these two methods, with a special focus on ensuring temporal consistency
-                    and realistic coloration.
+                    and realistic coloration across frames.
                 </p>
             </div>
         </div>
@@ -83,6 +83,7 @@
     </div>
 </section>
 -->
+
 <!-- Our Dual Approach Section -->
 <section class="my-5">
     <div class="container">
@@ -92,13 +93,17 @@
         <div class="row align-items-center mb-5">
             <div class="col-lg-6">
                 <h3>1. Diffusion-Based Approach</h3>
-                <p>Diffusion models are a class of generative models that work by iteratively adding and then removing noise. Our implementation:</p>
+                <p>Our diffusion model works by iteratively adding and removing noise:</p>
                 <ul>
-                    <li><strong>Operates in LAB Color Space</strong> - Separating luminance (grayscale) from color information</li>
-                    <li><strong>Uses U-Net Architecture</strong> - With encoder, bottleneck, decoder, and skip connections</li>
-                    <li><strong>Ensures Temporal Consistency</strong> - Through neural deflickering with an atlas-based approach</li>
+                    <li><strong>LAB Color Space Processing</strong> - Separates luminance ("L" channel) from color ("A" and "B" channels), allowing us to denoise only color components</li>
+                    <li><strong>U-Net Architecture</strong> - A 3-channel LAB input with noised AB channels passes through encoder, bottleneck, and decoder with skip connections</li>
+                    <li><strong>Noise Scheduling</strong> - Carefully calibrated variance schedule controls the noise addition/removal process</li>
+                    <li><strong>Forward Process</strong> - Gaussian noise is added to color channels in increasing amounts over T timesteps</li>
+                    <li><strong>Reverse Process</strong> - The model learns to predict and remove noise iteratively, conditioned on grayscale input</li>
+                    <li><strong>Resolution Enhancement</strong> - Bicubic interpolation upscales low-resolution outputs while preserving original grayscale details</li>
+                    <li><strong>Neural Deflickering</strong> - Flawed atlas approach identifies and corrects temporal inconsistencies between frames</li>
                 </ul>
-                <a href="{{ url_for('gallery') }}?tab=diffusion" class="btn btn-outline-primary mt-3">See Diffusion Results</a>
+                <a href="{{ url_for('gallery_new') }}" class="btn btn-outline-primary mt-3">See Diffusion Results</a>
             </div>
             <div class="col-lg-6">
                 <img src="{{ url_for('static', filename='images/diffusion_process.jpg') }}" alt="Diffusion Model Process" class="img-fluid rounded shadow">
@@ -106,19 +111,63 @@
         </div>
         
         <!-- GAN Model -->
-        <div class="row align-items-center">
-            <div class="col-lg-6 order-lg-2">
+        <div class="row align-items-center flex-row-reverse">
+            <div class="col-lg-6">
                 <h3>2. GAN-Based Approach</h3>
-                <p>Our GAN implementation uses a saliency map-guided approach for more focused colorization of important regions:</p>
+                <p>Our GAN implementation uses saliency maps to guide colorization:</p>
                 <ul>
-                    <li><strong>Saliency-Guided Generator</strong> - Focuses on important areas of the image</li>
-                    <li><strong>Dual Discriminator Setup</strong> - One for color realism, one for attention to salient areas</li>
-                    <li><strong>Combined Loss Functions</strong> - Balancing adversarial, L1, and saliency losses</li>
+                    <li><strong>SCGAN-Based Generator</strong> - Modified with channel reduction at deeper layers for improved training stability</li>
+                    <li><strong>Saliency Detection</strong> - Pyramid Feature Attention Network identifies visually important regions</li>
+                    <li><strong>70×70 PatchGAN Discriminators</strong>:
+                        <ul>
+                            <li>Standard discriminator - Enforces global color realism</li>
+                            <li>Attention discriminator - Focuses on salient regions for detail refinement</li>
+                        </ul>
+                    </li>
+                    <li><strong>Loss Functions</strong> - Balanced combination of adversarial, L1, and perceptual losses</li>
+                    <li><strong>Optical Flow</strong> - FastFlowNet tracks motion between frames to maintain color consistency</li>
+                    <li><strong>Adaptive Color Propagation</strong> - Warps colors from keyframes to subsequent frames based on motion vectors</li>
                 </ul>
                 <a href="{{ url_for('gallery') }}?tab=gan" class="btn btn-outline-primary mt-3">See GAN Results</a>
             </div>
-            <div class="col-lg-6 order-lg-1">
+            <div class="col-lg-6">
                 <img src="{{ url_for('static', filename='images/gan_process.jpg') }}" alt="GAN Model Process" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technical Challenges -->
+<section class="my-5 bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Technical Challenges & Solutions</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h4 class="card-title"><i class="bi bi-bezier2 text-primary me-2"></i>Temporal Consistency</h4>
+                        <p class="card-text">To prevent color flickering between frames, we:</p>
+                        <ul>
+                            <li>Applied neural filtering for stable color transitions</li>
+                            <li>Implemented frame-to-frame motion analysis</li>
+                            <li>Used atlas-based deflickering techniques</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h4 class="card-title"><i class="bi bi-cpu text-primary me-2"></i>Computational Efficiency</h4>
+                        <p class="card-text">We optimized resource usage through:</p>
+                        <ul>
+                            <li>Intelligent keyframe detection</li>
+                            <li>Two-stage processing: low-res colorization with high-res upscaling</li>
+                            <li>Network architecture optimization</li>
+                            <li>Strategic GPU training on UCF101 dataset</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -162,6 +211,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- References Section -->
 <section class="my-5">
