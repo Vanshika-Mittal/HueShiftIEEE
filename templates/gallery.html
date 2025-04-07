@@ -3,11 +3,7 @@
 {% block content %}
 <div class="container mt-5">
     <h1 class="text-center mb-4">HueShift Gallery</h1>
-    
-    <div class="alert alert-info mt-3 mb-3">
-        <strong>Note:</strong> This gallery features the latest final videos with standardized formats.
-    </div>
-    
+        
     <ul class="nav nav-tabs" id="galleryTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="diffusion-tab" data-bs-toggle="tab" data-bs-target="#diffusion" type="button" role="tab" aria-controls="diffusion" aria-selected="true">Diffusion Model Results</button>
@@ -324,19 +320,9 @@
                                     <h5>{{ sample.display_name }}</h5>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div class="row g-0">
-                                        <div class="col-6">
-                                            <div class="position-relative">
-                                                <div class="badge bg-secondary position-absolute bottom-0 start-0 m-2">Input</div>
-                                                <video class="w-100 h-100 object-fit-cover" src="{{ sample.input_video }}" loop muted playsinline></video>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="position-relative">
-                                                <div class="badge bg-primary position-absolute bottom-0 start-0 m-2">Colorized</div>
-                                                <video class="w-100 h-100 object-fit-cover" src="{{ sample.output_video }}" loop muted playsinline></video>
-                                            </div>
-                                        </div>
+                                    <div class="position-relative">
+                                        <div class="badge bg-primary position-absolute bottom-0 start-0 m-2">Colorized</div>
+                                        <video class="w-100 h-100 object-fit-cover" src="{{ sample.output_video }}" loop muted playsinline></video>
                                     </div>
                                 </div>
                                 <div class="card-footer">
