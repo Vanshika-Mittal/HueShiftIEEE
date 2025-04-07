@@ -25,23 +25,6 @@
     </div>
 </div>
 
-<!-- Project Overview Section -->
-<section class="my-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Project Overview</h2>
-        <div class="row">
-            <div class="col-lg-10 mx-auto">
-                <p class="lead text-center">
-                    HueShift is a video colorization project that transforms grayscale videos into vibrant color
-                    using two different deep learning approaches: Diffusion Models and Generative Adversarial Networks (GANs).
-                    Our goal was to develop and compare these two methods, with a special focus on ensuring temporal consistency
-                    and realistic coloration across frames. maintaining temporal consistency is crucial to avoid flickering and ensure realism. We trained our models on the UCF101 Action 
-                    Recognition Dataset
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
 <!-- Why Video Colorization Section -->
 <!--
 <section class="my-5 bg-light py-5">
@@ -116,6 +99,15 @@
                     allows for high-quality colorization by gradually learning to reverse the noise addition process, guided 
                     by the grayscale input.
                 </p>
+                
+                <div class="mt-3 mb-3">
+                    <div class="text-center">
+                        <video class="img-fluid rounded shadow-sm" autoplay loop muted style="max-height: 300px;">
+                            <source src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-Drumming-g06-c01.mp4') }}" type="video/mp4">
+                        </video>
+                        <small class="d-block text-muted mt-2">Sample 3 - Drumming (Final Output)</small>
+                    </div>
+                </div>
                 
                 <a href="{{ url_for('gallery_new') }}" class="btn btn-outline-primary mt-2">See Diffusion Results</a>
             </div>
