@@ -170,7 +170,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Auto-play GAN videos on page load
     window.addEventListener('load', function() {
-        setTimeout(() => playAllVideos(ganVideoArray), 700);
+        setTimeout(() => {
+            console.log("Attempting to play all GAN videos:", ganVideoArray.length);
+            ganVideoArray.forEach((video, index) => {
+                // Ensure video is ready to play
+                if (video.readyState >= 2) {
+                    video.play().catch(e => console.warn(`Could not play GAN video ${index}:`, e));
+                } else {
+                    // If not ready, wait for it to be ready
+                    video.addEventListener('canplay', function onCanPlay() {
+                        video.play().catch(e => console.warn(`Could not play GAN video ${index} (delayed):`, e));
+                        video.removeEventListener('canplay', onCanPlay);
+                    });
+                }
+            });
+        }, 300); // Reduced timeout for faster playback
     });
     
     // GAN filtering

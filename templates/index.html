@@ -14,7 +14,7 @@
                 these methods, with a special focus on ensuring temporal consistency and realistic coloration across frames. 
             </p>
             <div class="mt-4">
-                <a href="{{ url_for('gallery_new') }}" class="btn btn-primary btn-lg">View Gallery</a>
+                <a href="{{ url_for('gallery') }}" class="btn btn-primary btn-lg">View Gallery</a>
             </div>
         </div>
         <div class="col-md-5">
@@ -109,7 +109,7 @@
                     </div>
                 </div>
                 
-                <a href="{{ url_for('gallery_new') }}" class="btn btn-outline-primary mt-2">See Diffusion Results</a>
+                <a href="{{ url_for('gallery') }}" class="btn btn-outline-primary mt-2">See Diffusion Results</a>
             </div>
             <div class="col-lg-6">
                 <div class="text-center">
@@ -187,11 +187,11 @@
                     </div>
                     <div class="card-body p-0">
                         <video class="w-100" autoplay loop muted>
-                            <source src="{{ url_for('static', filename='gallery/gan/simple/v_HorseRiding_g03_c04.mp4') }}" type="video/mp4">
+                            <source src="{{ url_for('static', filename='gallery/gan/slightly-complex/CricketShot_v_CricketShot_g15_c03.mp4') }}" type="video/mp4">
                         </video>
                     </div>
                     <div class="card-footer">
-                        <p class="mb-0">Horse Riding (Simple Scene)</p>
+                        <p class="mb-0">Cricket Shot (Slightly Complex Scene)</p>
                     </div>
                 </div>
             </div>
