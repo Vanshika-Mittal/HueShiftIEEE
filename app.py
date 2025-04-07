@@ -487,13 +487,13 @@ def gallery_new():
 
     if os.path.exists(gan_dir):
         complexity_dirs = {
-            "simple": "Simple",
-            "slightly-complex": "Medium Complexity",
-            "very-complex": "Complex",
+            "simple": "simple",
+            "slightly-complex": "medium",
+            "very-complex": "complex",
         }
 
-        for complexity, display_name in complexity_dirs.items():
-            complexity_dir = os.path.join(gan_dir, complexity)
+        for dir_name, complexity_value in complexity_dirs.items():
+            complexity_dir = os.path.join(gan_dir, dir_name)
             if os.path.exists(complexity_dir):
                 # Get .webm files instead of .mp4 files since they work better
                 webm_files = [
@@ -517,9 +517,8 @@ def gallery_new():
                     gan_samples.append(
                         {
                             "display_name": formatted_name,
-                            "input_video": f"/static/gallery/gan/{complexity}/{file}",
-                            "output_video": f"/static/gallery/gan/{complexity}/{file}",
-                            "complexity": complexity,
+                            "output_video": f"/static/gallery/gan/{dir_name}/{file}",
+                            "complexity": complexity_value,
                         }
                     )
 

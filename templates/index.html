@@ -105,7 +105,7 @@
                         <video class="img-fluid rounded shadow-sm" autoplay loop muted style="max-height: 300px;">
                             <source src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-Drumming-g06-c01.mp4') }}" type="video/mp4">
                         </video>
-                        <small class="d-block text-muted mt-2">Sample 3 - Drumming (Final Output)</small>
+                        <small class="d-block text-muted mt-2">Diffusion Sample 3 - Drumming (Final Output)</small>
                     </div>
                 </div>
                 
@@ -154,6 +154,15 @@
                     color realism and local detail accuracy.
                 </p>
                 
+                <div class="mt-3 mb-3">
+                    <div class="text-center">
+                        <video class="img-fluid rounded shadow-sm" autoplay loop muted style="max-height: 600px;">
+                            <source src="{{ url_for('static', filename='gallery/gan/slightly-complex/BenchPress_v_BenchPress_g01_c01.webm') }}" type="video/webm">
+                        </video>
+                        <small class="d-block text-muted mt-2">GAN Sample 12 - BenchPress</small>
+                    </div>
+                </div>
+                
                 <a href="{{ url_for('gallery') }}?tab=gan" class="btn btn-outline-primary mt-2">See GAN Results</a>
             </div>
         </div>
@@ -176,7 +185,7 @@
                         </video>
                     </div>
                     <div class="card-footer">
-                        <p class="mb-0">Sample 7  Handstand Walking</p>
+                        <p class="mb-0">Sample 7 - Handstand Walking</p>
                     </div>
                 </div>  
             </div>
@@ -191,7 +200,7 @@
                         </video>
                     </div>
                     <div class="card-footer">
-                        <p class="mb-0">Sample 10 -Baby Crawling</p>
+                        <p class="mb-0">Sample 10 - Baby Crawling</p>
                     </div>
                 </div>
             </div>
