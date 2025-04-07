@@ -36,8 +36,8 @@
         </div>
     </div>
 </section>
-
 <!-- Why Video Colorization Section -->
+<!--
 <section class="my-5 bg-light py-5">
     <div class="container">
         <h2 class="text-center mb-4">Why Video Colorization?</h2>
@@ -82,7 +82,7 @@
         </div>
     </div>
 </section>
-
+-->
 <!-- Our Dual Approach Section -->
 <section class="my-5">
     <div class="container">
@@ -124,53 +124,6 @@
     </div>
 </section>
 
-<!-- Results Comparison -->
-<section class="my-5 bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Results Comparison</h2>
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-primary">
-                            <tr>
-                                <th scope="col">Aspect</th>
-                                <th scope="col">Diffusion Model</th>
-                                <th scope="col">GAN Model</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">Color Quality</th>
-                                <td>More natural color distribution</td>
-                                <td>Vibrant but can sometimes be less accurate</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Scene Handling</th>
-                                <td>Better at complex scenes</td>
-                                <td>Excels at simple scenes</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Inference Time</th>
-                                <td>Slower due to iterative denoising</td>
-                                <td>Faster single-pass inference</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Training Efficiency</th>
-                                <td>More compute-intensive</td>
-                                <td>More efficient training</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="text-center mt-4">
-            <a href="{{ url_for('gallery') }}" class="btn btn-primary">Explore Full Gallery</a>
-        </div>
-    </div>
-</section>
-
 <!-- Sample Results -->
 <section class="my-5">
     <div class="container">
@@ -204,40 +157,6 @@
                     <div class="card-footer">
                         <p class="mb-0">Horse Riding (Simple Scene)</p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Team Section -->
-<section class="my-5 bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Our Team</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Mentors</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Aditya Ubaradka</li>
-                        <li class="list-group-item">Aishini Bhattacharjee</li>
-                        <li class="list-group-item">Hemang Jamadagni</li>
-                        <li class="list-group-item">Sree Dakshinya</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Mentees</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Akhil Sakhtieswaran</li>
-                        <li class="list-group-item">Swaraj Singh</li>
-                        <li class="list-group-item">Vanshika Mittal</li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -283,14 +202,4 @@
     </div>
 </section>
 
-<!-- Call-to-Action -->
-<section class="my-5 text-center">
-    <div class="container">
-        <div class="p-5 bg-primary text-white rounded">
-            <h2>Ready to try HueShift?</h2>
-            <p class="lead">Transform your grayscale images and videos into vibrant color</p>
-            <a href="{{ url_for('upload') }}" class="btn btn-light btn-lg mt-3">Get Started Now</a>
-        </div>
-    </div>
-</section>
 {% endblock %} 
