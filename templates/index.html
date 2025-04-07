@@ -8,9 +8,7 @@
     <div class="row">
         <div class="col-md-7">
             <h1 class="display-4">HueShift: Breathing Life into Every Frame</h1>
-            <p class="lead">Transforming grayscale videos into vibrant color with advanced AI</p>
             <div class="mt-4">
-                <a href="{{ url_for('upload') }}" class="btn btn-primary btn-lg">Try It Now</a>
                 <a href="{{ url_for('gallery') }}" class="btn btn-outline-primary btn-lg ms-2">View Gallery</a>
             </div>
         </div>
@@ -27,7 +25,7 @@
         <div class="row">
             <div class="col-lg-8 mx-auto">
                 <p class="lead text-center">
-                    HueShift is an advanced video colorization project that transforms grayscale videos into vibrant color
+                    HueShift is a video colorization project that transforms grayscale videos into vibrant color
                     using two different deep learning approaches: Diffusion Models and Generative Adversarial Networks (GANs).
                     Our goal was to develop and compare these two methods, with a special focus on ensuring temporal consistency
                     and realistic coloration across frames.
@@ -151,20 +149,7 @@
                             <li>Applied neural filtering for stable color transitions</li>
                             <li>Implemented frame-to-frame motion analysis</li>
                             <li>Used atlas-based deflickering techniques</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="bi bi-cpu text-primary me-2"></i>Computational Efficiency</h4>
-                        <p class="card-text">We optimized resource usage through:</p>
-                        <ul>
-                            <li>Intelligent keyframe detection</li>
                             <li>Two-stage processing: low-res colorization with high-res upscaling</li>
-                            <li>Network architecture optimization</li>
-                            <li>Strategic GPU training on UCF101 dataset</li>
                         </ul>
                     </div>
                 </div>
