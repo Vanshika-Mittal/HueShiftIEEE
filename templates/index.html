@@ -8,12 +8,19 @@
     <div class="row">
         <div class="col-md-7">
             <h1 class="display-4">HueShift: Breathing Life into Every Frame</h1>
+            <p class="lead mt-3">
+                HueShift transforms grayscale videos into vibrant color using two different deep learning approaches: 
+                Diffusion Models and Generative Adversarial Networks (GANs). Our goal was to develop and compare 
+                these methods, with a special focus on ensuring temporal consistency and realistic coloration across frames. 
+            </p>
             <div class="mt-4">
-                <a href="{{ url_for('gallery') }}" class="btn btn-outline-primary btn-lg ms-2">View Gallery</a>
+                <a href="{{ url_for('gallery_new') }}" class="btn btn-primary btn-lg">View Gallery</a>
             </div>
         </div>
         <div class="col-md-5">
-            <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="HueShift Demo" class="img-fluid rounded shadow">
+            <video class="img-fluid rounded shadow" autoplay loop muted>
+                <source src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-ApplyLipstick-g05-c04.mp4') }}" type="video/mp4">
+            </video>
         </div>
     </div>
 </div>
@@ -23,12 +30,13 @@
     <div class="container">
         <h2 class="text-center mb-4">Project Overview</h2>
         <div class="row">
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-10 mx-auto">
                 <p class="lead text-center">
                     HueShift is a video colorization project that transforms grayscale videos into vibrant color
                     using two different deep learning approaches: Diffusion Models and Generative Adversarial Networks (GANs).
                     Our goal was to develop and compare these two methods, with a special focus on ensuring temporal consistency
-                    and realistic coloration across frames.
+                    and realistic coloration across frames. maintaining temporal consistency is crucial to avoid flickering and ensure realism. We trained our models on the UCF101 Action 
+                    Recognition Dataset
                 </p>
             </div>
         </div>
@@ -92,6 +100,7 @@
             <div class="col-lg-6">
                 <h3>1. Diffusion-Based Approach</h3>
                 <p>Our diffusion model works by iteratively adding and removing noise:</p>
+                
                 <ul>
                     <li><strong>LAB Color Space Processing</strong> - Separates luminance ("L" channel) from color ("A" and "B" channels), allowing us to denoise only color components</li>
                     <li><strong>U-Net Architecture</strong> - A 3-channel LAB input with noised AB channels passes through encoder, bottleneck, and decoder with skip connections</li>
@@ -101,18 +110,38 @@
                     <li><strong>Resolution Enhancement</strong> - Bicubic interpolation upscales low-resolution outputs while preserving original grayscale details</li>
                     <li><strong>Neural Deflickering</strong> - Flawed atlas approach identifies and corrects temporal inconsistencies between frames</li>
                 </ul>
-                <a href="{{ url_for('gallery_new') }}" class="btn btn-outline-primary mt-3">See Diffusion Results</a>
+                
+                <p class="mt-3">
+                    Our model was trained on vast.ai GPUs using keyframes from the UCF101 dataset. The diffusion process 
+                    allows for high-quality colorization by gradually learning to reverse the noise addition process, guided 
+                    by the grayscale input.
+                </p>
+                
+                <a href="{{ url_for('gallery_new') }}" class="btn btn-outline-primary mt-2">See Diffusion Results</a>
             </div>
             <div class="col-lg-6">
-                <img src="{{ url_for('static', filename='images/diffusion_process.jpg') }}" alt="Diffusion Model Process" class="img-fluid rounded shadow">
+                <div class="text-center">
+                    <img src="{{ url_for('static', filename='landingpage/diffusion.png') }}" alt="Diffusion Process" class="img-fluid rounded shadow-sm mb-4">
+                    <img src="{{ url_for('static', filename='landingpage/ddpmarch.png') }}" alt="DDPM Architecture" class="img-fluid rounded shadow-sm mb-4">
+                    <img src="{{ url_for('static', filename='landingpage/ddpm.png') }}" alt="DDPM Process" class="img-fluid rounded shadow mb-4">
+                    <img src="{{ url_for('static', filename='landingpage/timeattention.png') }}" alt="Time Attention" class="img-fluid rounded shadow">
+                </div>
             </div>
         </div>
         
         <!-- GAN Model -->
-        <div class="row align-items-center flex-row-reverse">
+        <div class="row align-items-center mt-5">
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <img src="{{ url_for('static', filename='landingpage/ganarch.png') }}" alt="GAN Architecture" class="img-fluid rounded shadow-sm mb-4">
+                    <img src="{{ url_for('static', filename='landingpage/discriminator.png') }}" alt="Discriminator" class="img-fluid rounded shadow-sm mb-4">
+                    <img src="{{ url_for('static', filename='landingpage/gen.png') }}" alt="Generator Architecture" class="img-fluid rounded shadow">
+                </div>
+            </div>
             <div class="col-lg-6">
                 <h3>2. GAN-Based Approach</h3>
                 <p>Our GAN implementation uses saliency maps to guide colorization:</p>
+                
                 <ul>
                     <li><strong>SCGAN-Based Generator</strong> - Modified with channel reduction at deeper layers for improved training stability</li>
                     <li><strong>Saliency Detection</strong> - Pyramid Feature Attention Network identifies visually important regions</li>
@@ -126,33 +155,14 @@
                     <li><strong>Optical Flow</strong> - FastFlowNet tracks motion between frames to maintain color consistency</li>
                     <li><strong>Adaptive Color Propagation</strong> - Warps colors from keyframes to subsequent frames based on motion vectors</li>
                 </ul>
-                <a href="{{ url_for('gallery') }}?tab=gan" class="btn btn-outline-primary mt-3">See GAN Results</a>
-            </div>
-            <div class="col-lg-6">
-                <img src="{{ url_for('static', filename='images/gan_process.jpg') }}" alt="GAN Model Process" class="img-fluid rounded shadow">
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Technical Challenges -->
-<section class="my-5 bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Technical Challenges & Solutions</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="bi bi-bezier2 text-primary me-2"></i>Temporal Consistency</h4>
-                        <p class="card-text">To prevent color flickering between frames, we:</p>
-                        <ul>
-                            <li>Applied neural filtering for stable color transitions</li>
-                            <li>Implemented frame-to-frame motion analysis</li>
-                            <li>Used atlas-based deflickering techniques</li>
-                            <li>Two-stage processing: low-res colorization with high-res upscaling</li>
-                        </ul>
-                    </div>
-                </div>
+                
+                <p class="mt-3">
+                    We deviated from the original SCGAN design by reducing channel counts as network depth increased, 
+                    improving efficiency and reducing overfitting. The dual-discriminator setup enhances both global 
+                    color realism and local detail accuracy.
+                </p>
+                
+                <a href="{{ url_for('gallery') }}?tab=gan" class="btn btn-outline-primary mt-2">See GAN Results</a>
             </div>
         </div>
     </div>
@@ -170,11 +180,11 @@
                     </div>
                     <div class="card-body p-0">
                         <video class="w-100" autoplay loop muted>
-                            <source src="{{ url_for('static', filename='gallery/diffusion/v_ApplyLipstick_g05_c04/concatenated/output.mp4') }}" type="video/mp4">
+                            <source src="{{ url_for('static', filename='gallery/diffusion/v_HandstandWalking_g21_c04/concatenated/output.mp4') }}" type="video/mp4">
                         </video>
                     </div>
                     <div class="card-footer">
-                        <p class="mb-0">Sample 1 - Apply Lipstick (Combined View)</p>
+                        <p class="mb-0">Sample 7 - Handstand Walking (Final Output)</p>
                     </div>
                 </div>
             </div>
@@ -197,6 +207,43 @@
     </div>
 </section>
 
+<!-- Technical Challenges -->
+<section class="my-5 bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Technical Challenges</h2>        
+        <div class="mt-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title"><i class="bi bi-arrow-repeat text-primary me-2"></i>Achieving Temporal Consistency</h4>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="text-center">
+                                <video class="img-fluid rounded shadow-sm" autoplay loop muted style="max-height: 500px; width: 85%;">
+                                    <source src="{{ url_for('static', filename='gallery/diffusion/v_CricketShot_g04_c04/stage_1/010000/global_info_v_CricketShot_g04_c04.mp4') }}" type="video/mp4">
+                                </video>
+                                <small class="d-block text-muted mt-2">Global info visualization - Cricket Shot</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p>Our videos were deflickered through a two-stage neural approach:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="h6">Atlas Generation Stage</h5>
+                            <p>Video frames were processed by mapping each pixel's (x,y,t) coordinates to a consistent 2D atlas space using a 6-layer MLP network without positional encoding. Colors were reconstructed using an 8-layer MLP with positional encoding at 10 frequency bands. This mapping was optimized through a combination of RGB reconstruction loss (weight 5000), optical flow consistency loss (weight 500), rigidity loss (weight 1.0), and gradient preservation loss (weight 1000) for 10,000 iterations at 768×432 resolution.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="h6">Neural Filtering Stage</h5>
+                            <p>The second stage applied a UNet-based neural filter with 32 initial features followed by a TransformNet with ConvLSTM for temporal consistency. This refined the atlas-reconstructed frames to preserve details while maintaining temporal consistency. The final output, stored in the "final" directory at the original resolution, shows the video with flickering successfully removed while preserving natural motion and details.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- References Section -->
 <section class="my-5">
