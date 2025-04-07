@@ -1,0 +1,24 @@
+model:
+  input_channels: 3
+  output_channels: 2
+  hidden_channels: [256, 384, 512, 768]
+  num_blocks: 4
+  time_emb_dim: 512
+  down_sample: [true, true, true]
+  num_down_layers: 2
+  num_mid_layers: 2
+  num_up_layers: 2
+  attn: [true, true, true]
+  norm_channels: 32
+  num_heads: 16
+  conv_out_channels: 128
+
+dataset:
+  image_size: 64
+  batch_size: 2
+  num_workers: 2
+
+training:
+  num_timesteps: 1000
+  learning_rate: 1e-5
+  sample_step: 2500 

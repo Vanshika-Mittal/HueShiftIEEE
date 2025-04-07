@@ -438,10 +438,14 @@ def gallery():
         "v_IceDancing_g03_c02": "Sample 10 - Ice Dancing",
     }
 
+    # Get the base directory
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    print(f"Base directory: {base_dir}")
+
     # Get all diffusion model samples
     diffusion_samples = []
     diffusion_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        base_dir,
         "Gallery",
         "Gallery",
         "Grey2Color",
@@ -496,6 +500,7 @@ def gallery():
                     "static",
                     filename=f"gallery/diffusion/{sample_name}/final/output.mp4",
                 )
+                print(f"Final output URL: {sample_data['final_output']}")
 
             # Check for high-res output
             high_res_dir = os.path.join(diffusion_dir, "high_res_outputs", sample_dir)
@@ -510,6 +515,7 @@ def gallery():
                     "static",
                     filename=f"gallery/diffusion/{sample_name}/high_res/output.mp4",
                 )
+                print(f"High-res output URL: {sample_data['high_res_output']}")
 
             # Check for low-res output
             low_res_dir = os.path.join(diffusion_dir, "low_res_outputs", sample_dir)
@@ -524,6 +530,7 @@ def gallery():
                     "static",
                     filename=f"gallery/diffusion/{sample_name}/low_res/output.mp4",
                 )
+                print(f"Low-res output URL: {sample_data['low_res_output']}")
 
             # Check for ground truth
             ground_truth_dir = os.path.join(diffusion_dir, "Ground Truth", sample_dir)
@@ -540,6 +547,7 @@ def gallery():
                     "static",
                     filename=f"gallery/diffusion/{sample_name}/ground_truth/output.mp4",
                 )
+                print(f"Ground truth URL: {sample_data['ground_truth']}")
 
             # Generate grayscale video if not exists
             grayscale_dir = os.path.join(diffusion_dir, "Grayscale", sample_dir)
@@ -573,6 +581,7 @@ def gallery():
                         "static",
                         filename=f"gallery/diffusion/{sample_name}/grayscale/output.mp4",
                     )
+                    print(f"Grayscale URL: {sample_data['grayscale']}")
 
             # Check for stage_1
             stage_1_dir = os.path.join(post_processed_dir, sample_dir, "stage_1")
@@ -587,25 +596,25 @@ def gallery():
             )
 
             if os.path.exists(stage_1_dir):
-                if os.path.exists(
-                    os.path.join(
-                        stage_1_dir, "010000", f"global_info_{sample_name}.mp4"
-                    )
-                ):
+                global_info_path = os.path.join(
+                    stage_1_dir, "010000", f"global_info_{sample_name}.mp4"
+                )
+                if os.path.exists(global_info_path):
                     sample_data["global_info"] = url_for(
                         "static",
                         filename=f"gallery/diffusion/{sample_name}/stage_1/010000/global_info_{sample_name}.mp4",
                     )
+                    print(f"Global info URL: {sample_data['global_info']}")
 
-                if os.path.exists(
-                    os.path.join(
-                        stage_1_dir, "010000", f"reconstruction_{sample_name}.mp4"
-                    )
-                ):
+                reconstruction_path = os.path.join(
+                    stage_1_dir, "010000", f"reconstruction_{sample_name}.mp4"
+                )
+                if os.path.exists(reconstruction_path):
                     sample_data["stage_1"] = url_for(
                         "static",
                         filename=f"gallery/diffusion/{sample_name}/stage_1/010000/reconstruction_{sample_name}.mp4",
                     )
+                    print(f"Stage 1 URL: {sample_data['stage_1']}")
 
             # Check for neural_filter
             neural_filter_dir = os.path.join(
@@ -624,6 +633,7 @@ def gallery():
                     "static",
                     filename=f"gallery/diffusion/{sample_name}/neural_filter/output.mp4",
                 )
+                print(f"Neural filter URL: {sample_data['neural_filter']}")
 
             # Generate concatenated video with all outputs
             concat_dir = os.path.join(diffusion_dir, "Concatenated", sample_dir)
@@ -651,13 +661,14 @@ def gallery():
                     "static",
                     filename=f"gallery/diffusion/{sample_name}/concatenated/output.mp4",
                 )
+                print(f"Concatenated URL: {sample_data['concatenated']}")
 
             diffusion_samples.append(sample_data)
 
     # Get all GAN model samples
     gan_samples = []
     gan_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        base_dir,
         "Gallery",
         "FinalGANResults",
         "output",
@@ -701,12 +712,34 @@ def gallery():
                 print(f"GAN video path: {video_path}")
                 print(f"GAN video exists: {os.path.exists(video_path)}")
 
+                # Ensure static directory exists for GAN videos
+                static_gan_dir = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)),
+                    "static",
+                    "gallery",
+                    "gan",
+                    complexity,
+                )
+                os.makedirs(static_gan_dir, exist_ok=True)
+
+                # Create a symlink or copy the video to the static directory
+                static_video_path = os.path.join(static_gan_dir, video_file)
+                if not os.path.exists(static_video_path):
+                    try:
+                        os.symlink(video_path, static_video_path)
+                    except OSError:
+                        shutil.copy(video_path, static_video_path)
+                    print(f"Created link for GAN video: {static_video_path}")
+
+                url = url_for(
+                    "static", filename=f"gallery/gan/{complexity}/{video_file}"
+                )
+                print(f"Generated GAN video URL: {url}")
+
                 sample_data = {
                     "name": original_name,
                     "display_name": display_name,
-                    "output": url_for(
-                        "static", filename=f"gallery/gan/{complexity}/{video_file}"
-                    ),
+                    "output": url,
                     "complexity": complexity,
                 }
 
@@ -896,8 +929,20 @@ def page_not_found(e):
 @app.route("/static/gallery/<path:path>")
 def serve_gallery(path):
     print(f"Requested gallery path: {path}")
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    print(f"Base directory: {base_dir}")
 
-    # Map the URL path to the actual file path in the Gallery folder
+    # First try to serve from our static directory (faster and more reliable)
+    static_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "static", "gallery", path
+    )
+    print(f"Checking static path: {static_path}")
+    if os.path.exists(static_path) and os.path.isfile(static_path):
+        print(f"Found file in static directory")
+        directory, filename = os.path.split(static_path)
+        return send_from_directory(directory, filename)
+
+    # If not in static dir, try the actual Gallery folders
     if path.startswith("diffusion/"):
         # Extract sample name from path
         parts = path.split("/")
@@ -908,6 +953,7 @@ def serve_gallery(path):
 
         if file_type == "final":
             file_path = os.path.join(
+                base_dir,
                 "Gallery",
                 "Gallery",
                 "Grey2Color",
@@ -918,19 +964,22 @@ def serve_gallery(path):
             )
             print(f"Final video path: {file_path}")
             print(f"File exists: {os.path.exists(file_path)}")
-            return send_from_directory(
-                os.path.join(
-                    "Gallery",
-                    "Gallery",
-                    "Grey2Color",
-                    "Post Processed",
-                    sample_name,
-                    "final",
-                ),
-                "output.mp4",
-            )
+            if os.path.exists(file_path):
+                return send_from_directory(
+                    os.path.join(
+                        base_dir,
+                        "Gallery",
+                        "Gallery",
+                        "Grey2Color",
+                        "Post Processed",
+                        sample_name,
+                        "final",
+                    ),
+                    "output.mp4",
+                )
         elif file_type == "high_res":
             file_path = os.path.join(
+                base_dir,
                 "Gallery",
                 "Gallery",
                 "Grey2Color",
@@ -941,19 +990,22 @@ def serve_gallery(path):
             )
             print(f"High-res video path: {file_path}")
             print(f"File exists: {os.path.exists(file_path)}")
-            return send_from_directory(
-                os.path.join(
-                    "Gallery",
-                    "Gallery",
-                    "Grey2Color",
-                    "high_res_outputs",
-                    sample_name,
-                    "videos",
-                ),
-                "output.mp4",
-            )
+            if os.path.exists(file_path):
+                return send_from_directory(
+                    os.path.join(
+                        base_dir,
+                        "Gallery",
+                        "Gallery",
+                        "Grey2Color",
+                        "high_res_outputs",
+                        sample_name,
+                        "videos",
+                    ),
+                    "output.mp4",
+                )
         elif file_type == "low_res":
             file_path = os.path.join(
+                base_dir,
                 "Gallery",
                 "Gallery",
                 "Grey2Color",
@@ -964,19 +1016,22 @@ def serve_gallery(path):
             )
             print(f"Low-res video path: {file_path}")
             print(f"File exists: {os.path.exists(file_path)}")
-            return send_from_directory(
-                os.path.join(
-                    "Gallery",
-                    "Gallery",
-                    "Grey2Color",
-                    "low_res_outputs",
-                    sample_name,
-                    "videos",
-                ),
-                "output.mp4",
-            )
+            if os.path.exists(file_path):
+                return send_from_directory(
+                    os.path.join(
+                        base_dir,
+                        "Gallery",
+                        "Gallery",
+                        "Grey2Color",
+                        "low_res_outputs",
+                        sample_name,
+                        "videos",
+                    ),
+                    "output.mp4",
+                )
         elif file_type == "ground_truth":
             file_path = os.path.join(
+                base_dir,
                 "Gallery",
                 "Gallery",
                 "Grey2Color",
@@ -986,14 +1041,21 @@ def serve_gallery(path):
             )
             print(f"Ground truth video path: {file_path}")
             print(f"File exists: {os.path.exists(file_path)}")
-            return send_from_directory(
-                os.path.join(
-                    "Gallery", "Gallery", "Grey2Color", "Ground Truth", sample_name
-                ),
-                "output.mp4",
-            )
+            if os.path.exists(file_path):
+                return send_from_directory(
+                    os.path.join(
+                        base_dir,
+                        "Gallery",
+                        "Gallery",
+                        "Grey2Color",
+                        "Ground Truth",
+                        sample_name,
+                    ),
+                    "output.mp4",
+                )
         elif file_type == "grayscale":
             file_path = os.path.join(
+                base_dir,
                 "Gallery",
                 "Gallery",
                 "Grey2Color",
@@ -1003,14 +1065,21 @@ def serve_gallery(path):
             )
             print(f"Grayscale video path: {file_path}")
             print(f"File exists: {os.path.exists(file_path)}")
-            return send_from_directory(
-                os.path.join(
-                    "Gallery", "Gallery", "Grey2Color", "Grayscale", sample_name
-                ),
-                "output.mp4",
-            )
+            if os.path.exists(file_path):
+                return send_from_directory(
+                    os.path.join(
+                        base_dir,
+                        "Gallery",
+                        "Gallery",
+                        "Grey2Color",
+                        "Grayscale",
+                        sample_name,
+                    ),
+                    "output.mp4",
+                )
         elif file_type == "concatenated":
             file_path = os.path.join(
+                base_dir,
                 "Gallery",
                 "Gallery",
                 "Grey2Color",
@@ -1020,12 +1089,18 @@ def serve_gallery(path):
             )
             print(f"Concatenated video path: {file_path}")
             print(f"File exists: {os.path.exists(file_path)}")
-            return send_from_directory(
-                os.path.join(
-                    "Gallery", "Gallery", "Grey2Color", "Concatenated", sample_name
-                ),
-                "output.mp4",
-            )
+            if os.path.exists(file_path):
+                return send_from_directory(
+                    os.path.join(
+                        base_dir,
+                        "Gallery",
+                        "Gallery",
+                        "Grey2Color",
+                        "Concatenated",
+                        sample_name,
+                    ),
+                    "output.mp4",
+                )
         elif file_type == "stage_1":
             if len(parts) > 3:
                 final_path = "/".join(parts[3:])
@@ -1033,6 +1108,7 @@ def serve_gallery(path):
 
                 if "global_info" in final_path:
                     file_path = os.path.join(
+                        base_dir,
                         "Gallery",
                         "Gallery",
                         "Grey2Color",
@@ -1044,20 +1120,23 @@ def serve_gallery(path):
                     )
                     print(f"Global info video path: {file_path}")
                     print(f"File exists: {os.path.exists(file_path)}")
-                    return send_from_directory(
-                        os.path.join(
-                            "Gallery",
-                            "Gallery",
-                            "Grey2Color",
-                            "Post Processed",
-                            sample_name,
-                            "stage_1",
-                            "010000",
-                        ),
-                        f"global_info_{sample_name}.mp4",
-                    )
+                    if os.path.exists(file_path):
+                        return send_from_directory(
+                            os.path.join(
+                                base_dir,
+                                "Gallery",
+                                "Gallery",
+                                "Grey2Color",
+                                "Post Processed",
+                                sample_name,
+                                "stage_1",
+                                "010000",
+                            ),
+                            f"global_info_{sample_name}.mp4",
+                        )
                 elif "reconstruction" in final_path:
                     file_path = os.path.join(
+                        base_dir,
                         "Gallery",
                         "Gallery",
                         "Grey2Color",
@@ -1069,20 +1148,23 @@ def serve_gallery(path):
                     )
                     print(f"Reconstruction video path: {file_path}")
                     print(f"File exists: {os.path.exists(file_path)}")
-                    return send_from_directory(
-                        os.path.join(
-                            "Gallery",
-                            "Gallery",
-                            "Grey2Color",
-                            "Post Processed",
-                            sample_name,
-                            "stage_1",
-                            "010000",
-                        ),
-                        f"reconstruction_{sample_name}.mp4",
-                    )
+                    if os.path.exists(file_path):
+                        return send_from_directory(
+                            os.path.join(
+                                base_dir,
+                                "Gallery",
+                                "Gallery",
+                                "Grey2Color",
+                                "Post Processed",
+                                sample_name,
+                                "stage_1",
+                                "010000",
+                            ),
+                            f"reconstruction_{sample_name}.mp4",
+                        )
         elif file_type == "neural_filter":
             file_path = os.path.join(
+                base_dir,
                 "Gallery",
                 "Gallery",
                 "Grey2Color",
@@ -1093,17 +1175,19 @@ def serve_gallery(path):
             )
             print(f"Neural filter video path: {file_path}")
             print(f"File exists: {os.path.exists(file_path)}")
-            return send_from_directory(
-                os.path.join(
-                    "Gallery",
-                    "Gallery",
-                    "Grey2Color",
-                    "Post Processed",
-                    sample_name,
-                    "neural_filter",
-                ),
-                "output.mp4",
-            )
+            if os.path.exists(file_path):
+                return send_from_directory(
+                    os.path.join(
+                        base_dir,
+                        "Gallery",
+                        "Gallery",
+                        "Grey2Color",
+                        "Post Processed",
+                        sample_name,
+                        "neural_filter",
+                    ),
+                    "output.mp4",
+                )
 
     elif path.startswith("gan/"):
         # Extract complexity and filename
@@ -1112,18 +1196,26 @@ def serve_gallery(path):
         filename = parts[2]
 
         file_path = os.path.join(
-            "Gallery", "FinalGANResults", "output", complexity, filename
+            base_dir, "Gallery", "FinalGANResults", "output", complexity, filename
         )
         print(f"GAN video path: {file_path}")
         print(f"File exists: {os.path.exists(file_path)}")
 
-        return send_from_directory(
-            os.path.join("Gallery", "FinalGANResults", "output", complexity), filename
-        )
+        if os.path.exists(file_path):
+            return send_from_directory(
+                os.path.join(
+                    base_dir, "Gallery", "FinalGANResults", "output", complexity
+                ),
+                filename,
+            )
 
     print("File not found for path:", path)
     return "File not found", 404
 
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+# For Vercel serverless deployment
+app.debug = False
+app.config["TEMPLATES_AUTO_RELOAD"] = False
+
+# Vercel expects an 'app' variable
+application = app
