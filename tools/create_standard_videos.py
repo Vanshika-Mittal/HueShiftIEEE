@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 import glob
 import argparse
+import re
 
 
 def get_base_dirs():
@@ -110,7 +111,10 @@ def get_reference_video_info(gallery_dir, sample_name):
 
 def read_frames_from_directory(directory, name_pattern="frame_*.jpg"):
     """Read frames from a directory based on name pattern"""
-    frame_files = sorted(glob.glob(os.path.join(directory, name_pattern)))
+    frame_files = sorted(
+        glob.glob(os.path.join(directory, name_pattern)),
+        key=lambda x: int(re.search(r"frame_(\d+)", x).group(1)),
+    )
     frames = []
 
     for frame_file in frame_files:
@@ -137,8 +141,8 @@ def process_sample(gallery_dir, static_dir, sample_name):
 
     # Define source and destination directories
     ground_truth_dir = os.path.join(gallery_dir, "Ground Truth", sample_name)
-    low_res_dir = os.path.join(gallery_dir, "low_res_outputs", sample_name, "videos")
-    high_res_dir = os.path.join(gallery_dir, "high_res_outputs", sample_name, "videos")
+    low_res_frames_dir = os.path.join(gallery_dir, "low_res_outputs", sample_name)
+    high_res_frames_dir = os.path.join(gallery_dir, "high_res_outputs", sample_name)
     final_dir = os.path.join(gallery_dir, "Post Processed", sample_name, "final")
 
     # Create destination directories in static
@@ -176,43 +180,29 @@ def process_sample(gallery_dir, static_dir, sample_name):
             grayscale_frames, grayscale_output, fps=fps, size=video_size
         )
 
-    # Process Low-res video
-    low_res_mp4 = os.path.join(low_res_dir, "output.mp4")
-    if os.path.exists(low_res_mp4):
-        # Read existing video and create standardized version
-        cap = cv2.VideoCapture(low_res_mp4)
-        frames = []
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            frames.append(frame)
-        cap.release()
+    # Process Low-res frames
+    low_res_frames = read_frames_from_directory(low_res_frames_dir)
+    if low_res_frames:
+        low_res_output = os.path.join(
+            low_res_static_dir, f"{sample_name}_standardized.mp4"
+        )
+        create_video_from_frames(
+            low_res_frames, low_res_output, fps=fps, size=video_size
+        )
+    else:
+        print(f"No low-res frames found in {low_res_frames_dir}")
 
-        if frames:
-            low_res_output = os.path.join(
-                low_res_static_dir, f"{sample_name}_standardized.mp4"
-            )
-            create_video_from_frames(frames, low_res_output, fps=fps, size=video_size)
-
-    # Process High-res video
-    high_res_mp4 = os.path.join(high_res_dir, "output.mp4")
-    if os.path.exists(high_res_mp4):
-        # Read existing video and create standardized version
-        cap = cv2.VideoCapture(high_res_mp4)
-        frames = []
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            frames.append(frame)
-        cap.release()
-
-        if frames:
-            high_res_output = os.path.join(
-                high_res_static_dir, f"{sample_name}_standardized.mp4"
-            )
-            create_video_from_frames(frames, high_res_output, fps=fps, size=video_size)
+    # Process High-res frames
+    high_res_frames = read_frames_from_directory(high_res_frames_dir)
+    if high_res_frames:
+        high_res_output = os.path.join(
+            high_res_static_dir, f"{sample_name}_standardized.mp4"
+        )
+        create_video_from_frames(
+            high_res_frames, high_res_output, fps=fps, size=video_size
+        )
+    else:
+        print(f"No high-res frames found in {high_res_frames_dir}")
 
     # Process Final video
     final_mp4 = os.path.join(final_dir, "output.mp4")
@@ -245,10 +235,10 @@ def process_sample(gallery_dir, static_dir, sample_name):
         if ground_truth_frames
         else None,
         "low_res": os.path.join(low_res_static_dir, f"{sample_name}_standardized.mp4")
-        if os.path.exists(low_res_mp4)
+        if low_res_frames
         else None,
         "high_res": os.path.join(high_res_static_dir, f"{sample_name}_standardized.mp4")
-        if os.path.exists(high_res_mp4)
+        if high_res_frames
         else None,
         "final": os.path.join(final_static_dir, f"{sample_name}_standardized.mp4")
         if os.path.exists(final_mp4)
