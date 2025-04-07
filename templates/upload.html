@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Upload - Hue Shift{% endblock %}
+
+{% block content %}
+<div class="jumbotron p-5 bg-light rounded">
+    <h1 class="display-4">Bring Your Photos to Life</h1>
+    <p class="lead">Turn black & white into color - Simple, Fast, Free</p>
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-image display-4 mb-3 text-primary"></i>
+                    <h5 class="card-title">Photos</h5>
+                    <div class="upload-disabled">
+                        <form action="#" method="post" class="upload-form">
+                            <input type="file" name="image" accept="image/*" class="form-control mb-2" disabled>
+                            <button type="button" class="btn btn-primary disabled" disabled>Upload & Process</button>
+                        </form>
+                        <div class="upload-disabled-message">GPU Backend not connected</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-film display-4 mb-3 text-primary"></i>
+                    <h5 class="card-title">Videos</h5>
+                    <div class="upload-disabled">
+                        <form action="#" method="post" class="upload-video-form">
+                            <input type="file" name="file" accept="video/*" class="form-control mb-2" disabled>
+                            <button type="button" class="btn btn-primary disabled" disabled>Upload & Process</button>
+                        </form>
+                        <div class="upload-disabled-message">GPU Backend not connected</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5 text-center">
+    <a href="{{ url_for('gallery') }}" class="btn btn-lg btn-outline-primary">
+        <i class="bi bi-images me-2"></i>View Gallery
+    </a>
+</div>
+
+<div class="mt-4 alert alert-warning">
+    <h4><i class="bi bi-exclamation-triangle-fill me-2"></i>Demo Mode Only</h4>
+    <p class="mb-0">This is a demonstration of the HueShift project. The colorization backend is not currently connected. Please see our Gallery for pre-processed examples.</p>
+</div>
+
+<style>
+    .upload-disabled {
+        position: relative;
+    }
+    
+    .upload-disabled-message {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-weight: bold;
+        white-space: nowrap;
+        z-index: 100;
+    }
+    
+    .upload-disabled:hover .form-control,
+    .upload-disabled:hover .btn {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .upload-disabled:hover .upload-disabled-message {
+        display: block;
+    }
+</style>
+{% endblock %} 
