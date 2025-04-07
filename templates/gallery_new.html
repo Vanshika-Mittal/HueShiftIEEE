@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">HueShift Gallery (New)</h1>
+    
+    <div class="alert alert-info mt-3 mb-3">
+        <strong>Note:</strong> This gallery features the latest final videos with standardized formats.
+    </div>
+    
+    <ul class="nav nav-tabs" id="galleryTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="diffusion-tab" data-bs-toggle="tab" data-bs-target="#diffusion" type="button" role="tab" aria-controls="diffusion" aria-selected="true">Diffusion Model Results</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="gan-tab" data-bs-toggle="tab" data-bs-target="#gan" type="button" role="tab" aria-controls="gan" aria-selected="false">GAN Model Results</button>
+        </li>
+    </ul>
+    
+    <div class="tab-content" id="galleryTabContent">
+        <!-- Diffusion Model Tab -->
+        <div class="tab-pane fade show active" id="diffusion" role="tabpanel" aria-labelledby="diffusion-tab">
+            <div class="my-4">
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3>Sample 1 - Apply Lipstick</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="video-container">
+                                <div class="video-item">
+                                    <h5>Final Video</h5>
+                                    <video class="sync-video" src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-ApplyLipstick-g05-c04.mp4') }}" loop muted playsinline></video>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable section for additional outputs -->
+                        <div class="accordion" id="additionalApplyLipstick">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingApplyLipstick">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseApplyLipstick" aria-expanded="false" aria-controls="collapseApplyLipstick">
+                                        Additional Processing Stages
+                                    </button>
+                                </h2>
+                                <div id="collapseApplyLipstick" class="accordion-collapse collapse" aria-labelledby="headingApplyLipstick" data-bs-parent="#additionalApplyLipstick">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <!-- Stage 1 Reconstruction -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Stage 1 Reconstruction</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                            
+                                            <!-- Neural Filter Output -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Neural Filter Output</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                            
+                                            <!-- Global Info -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Global Info (Comparison Loss)</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                            
+                                            <!-- Combined Process -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Combined Process Visualization</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3>Sample 3 - Cricket Shot</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="video-container">
+                                <div class="video-item">
+                                    <h5>Final Video</h5>
+                                    <video class="sync-video" src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-CricketShot-g04-c04.mp4') }}" loop muted playsinline></video>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable section for additional outputs -->
+                        <div class="accordion" id="additionalCricketShot">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCricketShot">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCricketShot" aria-expanded="false" aria-controls="collapseCricketShot">
+                                        Additional Processing Stages
+                                    </button>
+                                </h2>
+                                <div id="collapseCricketShot" class="accordion-collapse collapse" aria-labelledby="headingCricketShot" data-bs-parent="#additionalCricketShot">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <!-- Stage 1 Reconstruction -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Stage 1 Reconstruction</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3>Sample 4 - Drumming</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="video-container">
+                                <div class="video-item">
+                                    <h5>Final Video</h5>
+                                    <video class="sync-video" src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-Drumming-g06-c01.mp4') }}" loop muted playsinline></video>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable section for additional outputs -->
+                        <div class="accordion" id="additionalDrumming">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingDrumming">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDrumming" aria-expanded="false" aria-controls="collapseDrumming">
+                                        Additional Processing Stages
+                                    </button>
+                                </h2>
+                                <div id="collapseDrumming" class="accordion-collapse collapse" aria-labelledby="headingDrumming" data-bs-parent="#additionalDrumming">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <!-- Stage 1 Reconstruction -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Stage 1 Reconstruction</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                            
+                                            <!-- Neural Filter Output -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Neural Filter Output</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3>Sample 6 - Front Crawl</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="video-container">
+                                <div class="video-item">
+                                    <h5>Final Video</h5>
+                                    <video class="sync-video" src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-FrontCrawl-g02-c04.mp4') }}" loop muted playsinline></video>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable section for additional outputs -->
+                        <div class="accordion" id="additionalFrontCrawl">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFrontCrawl">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFrontCrawl" aria-expanded="false" aria-controls="collapseFrontCrawl">
+                                        Additional Processing Stages
+                                    </button>
+                                </h2>
+                                <div id="collapseFrontCrawl" class="accordion-collapse collapse" aria-labelledby="headingFrontCrawl" data-bs-parent="#additionalFrontCrawl">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <!-- Stage 1 Reconstruction -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Stage 1 Reconstruction</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                            
+                                            <!-- Neural Filter Output -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Neural Filter Output</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3>Sample 10 - Ice Dancing</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="video-container">
+                                <div class="video-item">
+                                    <h5>Final Video</h5>
+                                    <video class="sync-video" src="{{ url_for('static', filename='gallery/diffusion/final_videos/v-IceDancing-g03-c02.mp4') }}" loop muted playsinline></video>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Expandable section for additional outputs -->
+                        <div class="accordion" id="additionalIceDancing">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingIceDancing">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIceDancing" aria-expanded="false" aria-controls="collapseIceDancing">
+                                        Additional Processing Stages
+                                    </button>
+                                </h2>
+                                <div id="collapseIceDancing" class="accordion-collapse collapse" aria-labelledby="headingIceDancing" data-bs-parent="#additionalIceDancing">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <!-- Stage 1 Reconstruction -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Stage 1 Reconstruction</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                            
+                                            <!-- Neural Filter Output -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5>Neural Filter Output</h5>
+                                                <p class="text-muted">Additional processing stages not available in the new gallery.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GAN Model Tab -->
+        <div class="tab-pane fade" id="gan" role="tabpanel" aria-labelledby="gan-tab">
+            <!-- Filter buttons for GAN samples -->
+            <div class="text-center my-4">
+                <div class="btn-group" role="group" aria-label="Complexity filter">
+                    <button type="button" class="btn btn-outline-primary active gan-filter" data-complexity="all">All Samples</button>
+                    <button type="button" class="btn btn-outline-primary gan-filter" data-complexity="simple">Simple Scenes</button>
+                    <button type="button" class="btn btn-outline-primary gan-filter" data-complexity="medium">Medium Complexity</button>
+                    <button type="button" class="btn btn-outline-primary gan-filter" data-complexity="complex">Complex Scenes</button>
+                </div>
+            </div>
+            
+            <div class="row">
+                {% if gan_samples %}
+                    {% for sample in gan_samples %}
+                        <div class="col-md-6 mb-4 gan-sample" data-complexity="{{ sample.complexity }}">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5>{{ sample.display_name }}</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="row g-0">
+                                        <div class="col-6">
+                                            <div class="position-relative">
+                                                <div class="badge bg-secondary position-absolute bottom-0 start-0 m-2">Input</div>
+                                                <video class="w-100 h-100 object-fit-cover" src="{{ sample.input_video }}" loop muted playsinline></video>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="position-relative">
+                                                <div class="badge bg-primary position-absolute bottom-0 start-0 m-2">Colorized</div>
+                                                <video class="w-100 h-100 object-fit-cover" src="{{ sample.output_video }}" loop muted playsinline></video>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">Complexity: {{ sample.complexity|capitalize }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">No GAN samples found.</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .video-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+    
+    .video-item {
+        flex: 1;
+        min-width: 160px;
+        max-width: 400px;
+        text-align: center;
+    }
+    
+    .video-item video {
+        width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(0, 123, 255, 0.1);
+        color: #0056b3;
+    }
+    
+    .additional-video {
+        width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        max-width: 320px;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+
+<script src="{{ url_for('static', filename='js/sync_videos.js') }}"></script>
+{% endblock %} 

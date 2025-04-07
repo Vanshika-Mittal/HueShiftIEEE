@@ -1213,9 +1213,58 @@ def serve_gallery(path):
     return "File not found", 404
 
 
-# For Vercel serverless deployment
-app.debug = False
-app.config["TEMPLATES_AUTO_RELOAD"] = False
+@app.route("/gallery-new")
+def gallery_new():
+    """
+    Display the new gallery page with the final videos.
+    """
+    # Get all GAN samples for the GAN tab
+    gan_samples = []
+    gan_dir = os.path.join(static_gallery_dir, "gan")
+
+    if os.path.exists(gan_dir):
+        complexity_dirs = {
+            "simple": "Simple",
+            "medium": "Medium Complexity",
+            "complex": "Complex",
+        }
+
+        for complexity, display_name in complexity_dirs.items():
+            complexity_dir = os.path.join(gan_dir, complexity)
+
+            if os.path.exists(complexity_dir):
+                for file in os.listdir(complexity_dir):
+                    if file.endswith(".mp4"):
+                        sample_name = file.replace(".mp4", "")
+                        display_name = sample_name.replace("v_", "").replace("_", " ")
+                        display_name = " ".join(
+                            word.capitalize() for word in display_name.split()
+                        )
+
+                        gan_samples.append(
+                            {
+                                "name": sample_name,
+                                "display_name": display_name,
+                                "complexity": complexity,
+                                "input_video": url_for(
+                                    "static",
+                                    filename=f"gallery/gan/{complexity}/{file}",
+                                ),
+                                "output_video": url_for(
+                                    "static",
+                                    filename=f"gallery/gan/{complexity}/{file}",
+                                ),
+                            }
+                        )
+
+    return render_template("gallery_new.html", gan_samples=gan_samples)
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
+
+# app.debug = False
+# app.config["TEMPLATES_AUTO_RELOAD"] = False
 
 # Vercel expects an 'app' variable
-application = app
+# application = app
