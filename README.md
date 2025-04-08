@@ -39,7 +39,16 @@ To address issues in temporal consistency during video colorization, we referred
     conda create -n hueshift -f environment.yml
     conda activate hueshift
     ```
-Run `train_ddpm.ipynb` to train and `infer_ddpm.ipynb` to run inference.
+
+    Run `train_ddpm.ipynb` to train and `infer_ddpm.ipynb` to run inference.
+
+3. **Increase resolution**
+Use `utils/res_change.py:colorize_image(high_res_gray_path, low_res_color_path, output_path)`<br>
+where <br>
+`high_res_gray_path`: path to the frame at the original resolution<br>
+`low_res_color_path`: path to the model output at low resolution<br>
+`output_path`: output path<br>
+4. [All in One Deflicker](https://github.com/ChenyangLEI/All-In-One-Deflicker)
 # Acknowledgments ❤️
  - [Key Frame Detector](https://github.com/joelibaceta/video-keyframe-detector) <br>
  - [All in One Deflicker](https://github.com/ChenyangLEI/All-In-One-Deflicker)
