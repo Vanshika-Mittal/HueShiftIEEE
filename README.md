@@ -89,7 +89,7 @@ https://github.com/user-attachments/assets/75e857e4-b31e-4816-a28a-c7d75d08deff
 
 * [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) - The foundation for our diffusion-based approach
 * [Blind Video Deflickering by Neural Filtering with a Flawed Atlas](https://arxiv.org/abs/2303.08120) - Used for ensuring temporal consistency in our diffusion approach
-* [SCGAN: Saliency Map-guided Colorization with Generative Adversarial Network](https://arxiv.org/abs/2011.05108) - The basis for our GAN-based approach
+* [SCGAN: Saliency Map-guided Colorization with Generative Adversarial Network](https://arxiv.org/abs/2011.11377) - The basis for our GAN-based approach
 * [Diffusion Approach GitHub](https://github.com/Kazedaa/Hueshift-Video-Coloring)
 * [GAN Approach GitHub](https://github.com/SreeDakshinya/HueShift-Video-Coloring/tree/main)
 
