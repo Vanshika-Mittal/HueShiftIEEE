@@ -13,14 +13,17 @@ We used a Saliency-Map-guided-GAN to extract important regions and to color each
 
 ### Saliency Maps
 A saliency map is a visual representation that highlights the most important regions in an image. We used a Pyramid Feature Attention network to focus on effective extraction of high-level context features and low-level spatial structural features from each image.
+
 ![image](https://github.com/user-attachments/assets/85d92f93-e751-42df-a790-b6c717a8cf54)
 
 ### Generator
 We adopted the generator architecture from the SCGAN framework as the foundational skeleton for our model. However, as an optimization, we deviated from the original design by reducing the number of channels as the network depth increased—contrary to SCGAN’s approach of increasing them—to improve efficiency and reduce overfitting.
+
 ![image](https://github.com/user-attachments/assets/faf0c881-0de5-4356-bb33-de4f69ae701f)
 
 ### Discriminator
 The model uses two discriminators based on the 70×70 PatchGAN architecture to enhance local detail and high-frequency accuracy. The first discriminator compares the generated colorized image with the ground truth, while the second—an attention-based discriminator—evaluates saliency-weighted versions of the images to better focus on important regions. This dual-discriminator setup improves realism and visual quality in the colorization results.
+
 ![image](https://github.com/user-attachments/assets/af0c9466-4ebd-4087-85c1-97622c133e96)
 
 ## Final Model Architecture (proposed)
