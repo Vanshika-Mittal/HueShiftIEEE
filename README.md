@@ -13,7 +13,7 @@ https://github.com/user-attachments/assets/c31369b7-bd1a-4be6-8e65-bb0a443d37d8
 ### 1. Diffusion-Based Approach
 <br>
 <p align="center">
-    <img src="static/landingpage/diffusion.png" alt="DDPM Process">
+    <img src="HueShift-website/static/landingpage/diffusion.png" alt="DDPM Process">
     <p align="center">Diffusion Process</p>
 </p>
 
@@ -33,7 +33,7 @@ Our model was trained on vast.ai GPUs using keyframes from the UCF101 dataset. T
 ### 2. GAN-Based Approach
 <br>
 <p align="center">
-    <img src="static/landingpage/ganarch.png" alt="GAN Architecture">
+    <img src="HueShift-website/static/landingpage/ganarch.png" alt="GAN Architecture">
     <p align="center">GAN Architecture</p>
 </p>
 
