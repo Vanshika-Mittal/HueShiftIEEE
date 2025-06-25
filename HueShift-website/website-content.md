@@ -15,7 +15,11 @@ The key challenge in video colorization is maintaining temporal consistency - en
 ## Our Dual Approach
 
 ### 1. Diffusion-Based Approach
-![Diffusion Model Process](images/diffusion_process.jpg)
+<br>
+<p align="center">
+    <img src="static/landingpage/diffusion.png" alt="DDPM Process">
+    <p align="center">Diffusion Process</p>
+</p>
 
 Diffusion models are a class of generative models that work by iteratively adding and then removing noise. Our specific implementation uses:
 
@@ -38,7 +42,11 @@ To ensure consistent coloration across frames, we implemented a deflickering pro
 2. Neural filtering: Refines the frame-to-frame consistency while preserving details
 
 ### 2. GAN-Based Approach
-![GAN Model Process](images/gan_process.jpg)
+<br>
+<p align="center">
+    <img src="static/landingpage/ganarch.png" alt="GAN Architecture">
+    <p align="center">GAN Architecture</p>
+</p>
 
 Our GAN implementation uses a saliency map-guided approach for more focused colorization of important regions.
 
@@ -61,7 +69,7 @@ The model is trained with a combined loss function including:
 ## Results
 
 ### Diffusion Model Outputs
-![Diffusion Results](images/diffusion_results.jpg)
+![Diffusion Results](static\gallery\diffusion\final_videos\v-Drumming-g06-c01.mp4)
 
 Our diffusion model showcases:
 - Consistent coloration across frames
@@ -74,7 +82,7 @@ Our diffusion model showcases:
 3. Temporal consistency enhancement using neural deflickering
 
 ### GAN Model Outputs
-![GAN Results](images/gan_results.jpg)
+![GAN Results](https://github.com/Vanshika-Mittal/HueShiftIEEE/blob/main/static/gallery/gan/very-complex/BandMarching_v_BandMarching_g25_c06.webm)
 
 The GAN-based approach demonstrates:
 - Excellent performance on simple scenes
@@ -130,27 +138,3 @@ We see several promising avenues for future work:
 2. More efficient architectures for real-time processing
 3. Integration with video editing software
 4. Style-conditioned colorization for artistic control
-
-## Team
-**Mentors**:
-- Aditya Ubaradka
-- Aishini Bhattacharjee
-- Hemang Jamadagni
-- Sree Dakshinya
-
-**Mentees**:
-- Akhil Sakhtieswaran
-- Swaraj Singh
-- Vanshika Mittal
-
-## References
-- [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239)
-- [Blind Video Deflickering by Neural Filtering with a Flawed Atlas](https://arxiv.org/abs/2303.08120)
-- [SCGAN: Saliency Map-guided Colorization with Generative Adversarial Network](https://arxiv.org/abs/2011.05108)
-- [Pyramid Feature Attention Network for Saliency detection](https://arxiv.org/abs/1903.00179)
-- [UnDIVE: Generalized Underwater Video Enhancement Using Generative Priors](https://arxiv.org/abs/2311.12131)
-
-## Code Repositories
-- [Diffusion Approach](https://github.com/Kazedaa/Hueshift-Video-Coloring)
-- [GANs Approach](https://github.com/SreeDakshinya/HueShift-Video-Coloring/tree/main)
-- [Project Website](https://github.com/Vanshika-Mittal/HueShift-IEEE)
